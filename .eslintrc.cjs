@@ -4,17 +4,14 @@ module.exports = {
     es2021: true,
     webextensions: true,
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended"],
   overrides: [],
-  parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint"],
-  rules: {},
+  plugins: ["react"],
+  rules: {
+    "react/prop-types": "off",
+  },
 };

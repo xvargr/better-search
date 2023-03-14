@@ -1,47 +1,60 @@
 import React from "react";
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
+import { useEffect, useState, useContext } from "react";
+import RefinementField from "./components/RefinementField";
 
-function App() {
-  const [url, setUrl] = useState("");
+import { QueryContext } from "./context/QueryContext";
+
+function App({ suggestionsId, inputId }) {
+  const { queryInstance } = useContext(QueryContext);
+  const [suggestionsVisible, setSuggestionsVisible] = useState(false);
+  const [queryState, setQueryState] = useState("");
+
+  // external elements
+  const suggestions = document.querySelector(suggestionsId);
+  const inputBox = document.querySelector(inputId);
 
   useEffect(() => {
-    const queryInfo = { active: true, lastFocusedWindow: true };
+    // initialize first value
+    queryInstance.setRawQuery(inputBox.value);
+    setQueryState(queryInstance.getRawQuery());
 
-    if (chrome.tabs) {
-      chrome.tabs.query(queryInfo, (tabs) => {
-        const url = tabs[0].url;
-        setUrl(url);
-      });
+    function handleInputChange(e) {
+      queryInstance.setRawQuery(e.target.value);
+      setQueryState(queryInstance.getRawQuery());
     }
+
+    function handleSuggestionsStyleChange() {
+      if (suggestions.style.display === "none") setSuggestionsVisible(false);
+      else setSuggestionsVisible(true);
+    }
+
+    const mutationsObserver = new MutationObserver(function (mutations) {
+      mutations.forEach(function () {
+        handleSuggestionsStyleChange();
+      });
+    });
+
+    // attach mutation observer to suggestions, way to track if suggestions are visible
+    mutationsObserver.observe(suggestions, {
+      attributes: true,
+      attributeFilter: ["style"],
+    });
+
+    // attach onInput listener to external text input element
+    inputBox.oninput = handleInputChange;
   }, []);
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  if (!suggestionsVisible) return null;
+  else
+    return (
+      <div className="w-full h-auto p-2 flex flex-wrap gap-1 items-center bg-slate-100 text-lightText dark:text-darkText shadow-sides font-sans">
+        <RefinementField type="general" value={queryState} />
+        <RefinementField type="exact" />
+        <RefinementField type="exclude" />
+        <RefinementField type="range" />
+        <RefinementField type="site" />
       </div>
-      <h1>Vite + React</h1>
-      <p>{url}</p>
-      {/* <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div> */}
-      {/* <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
-    </div>
-  );
+    );
 }
 
 export default App;
