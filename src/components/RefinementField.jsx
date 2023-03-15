@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { QueryContext } from "../context/QueryContext";
 
-function General({ value }) {
+function General() {
+  const { currentQuery, setRawQuery } = useContext(QueryContext);
   return (
-    <div className="bg-gray-400 w-full py-1 px-2 rounded-full flex justify-around items-center">
+    <div className="bg-gray-300 w-full py-1 px-2 rounded-full flex justify-around items-center">
       <input
         className="rounded-full w-full py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
         type="text"
-        value={value}
-        onChange={() => console.log("change")}
+        value={currentQuery}
+        onChange={(e) => {
+          setRawQuery(e.target.value);
+        }}
       ></input>
     </div>
   );
