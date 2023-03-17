@@ -9,6 +9,7 @@ export function QueryContextProvider(props) {
   const [queryInstance] = useState(new Query(""));
   const [currentQuery, setCurrentQuery] = useState(queryInstance.getRawQuery());
   const [currentExact, setCurrentExact] = useState(queryInstance.exact);
+  const [currentExclude, setCurrentExclude] = useState(queryInstance.exclude);
 
   // useEffect(() => {
   //   console.log("exact changed");
@@ -26,22 +27,35 @@ export function QueryContextProvider(props) {
   }
 
   function addExact(string) {
-    queryInstance.addExact(string);
-    setCurrentExact(queryInstance.exact);
+    const response = queryInstance.addExact(string);
+    if (response) setCurrentExact([...queryInstance.exact]);
   }
 
-  // function removeExact(string) {
-  //   queryInstance.removeExact(string);
-  //   setCurrentExact(queryInstance.exact);
-  // }
+  function removeExact(string) {
+    const response = queryInstance.removeExact(string);
+    if (response) setCurrentExact([...queryInstance.exact]);
+  }
+
+  function addExclude(string) {
+    const response = queryInstance.addExclude(string);
+    if (response) setCurrentExclude([...queryInstance.exclude]);
+  }
+
+  function removeExclude(string) {
+    const response = queryInstance.removeExclude(string);
+    if (response) setCurrentExclude([...queryInstance.exclude]);
+  }
 
   const queryState = {
     queryInstance,
     setRawQuery,
     currentQuery,
     currentExact,
+    currentExclude,
     addExact,
-    // removeExact,
+    removeExact,
+    addExclude,
+    removeExclude,
   };
 
   return (

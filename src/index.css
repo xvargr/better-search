@@ -8,7 +8,7 @@ div.XDyW0e {
   width: auto;
 }
 
-/* remove google also offered in x language element */
+/* remove google also offered in x language element, weird element causes visual bugs */
 div#SIvCob {
   display: none;
 }
