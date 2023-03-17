@@ -1,38 +1,45 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext } from "react";
 import { QueryContext } from "../context/QueryContext";
 
+import Tag from "./Tag";
+
 function General() {
-  const { currentQuery, setRawQuery, currentExact } = useContext(QueryContext);
+  const { currentQuery, setRawQuery, currentExact, currentExclude } =
+    useContext(QueryContext);
 
   function renderExact() {
     const result = [];
 
     currentExact.forEach((phrase) => {
-      result.push(
-        <div className="bg-red" key={phrase}>
-          {phrase}
-        </div>
-      );
+      result.push(<Tag type="exact" value={phrase} key={`i-${phrase}`} />);
     });
 
     return result;
   }
 
-  const exacts = useMemo(() => renderExact(), [JSON.stringify(currentExact)]);
+  function renderExclude() {
+    const result = [];
+
+    currentExclude.forEach((phrase) => {
+      result.push(<Tag type="exclude" value={phrase} key={`e-${phrase}`} />);
+    });
+
+    return result;
+  }
 
   return (
     <div className="bg-gray-300 w-full py-1 px-2 rounded-full flex justify-around items-center">
-      <span className="rounded-full w-full py-0.5 px-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
+      <span className="rounded-full w-full py-0.5 px-1 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
         <input
-          className="bg-white bg-opacity-0 outline-none"
+          className="ml-1 bg-white bg-opacity-0 outline-none grow"
           type="text"
           value={currentQuery}
           onChange={(e) => {
             setRawQuery(e.target.value);
           }}
         ></input>
-        {exacts}
-        <span>hello</span>
+        {renderExact()}
+        {renderExclude()}
       </span>
     </div>
   );
@@ -58,13 +65,12 @@ function Range() {
 }
 
 function Exact() {
-  const { queryInstance, addExact } = useContext(QueryContext);
+  const { addExact } = useContext(QueryContext);
 
   function handleEnter(e) {
     if (e.key !== "Enter" || e.target.value.length === 0) return null;
 
     addExact(e.target.value);
-    console.log("exact: ", queryInstance.exact);
     e.target.value = "";
     e.preventDefault();
   }
@@ -82,12 +88,23 @@ function Exact() {
 }
 
 function Exclude() {
+  const { addExclude } = useContext(QueryContext);
+
+  function handleEnter(e) {
+    if (e.key !== "Enter" || e.target.value.length === 0) return null;
+
+    addExclude(e.target.value);
+    e.target.value = "";
+    e.preventDefault();
+  }
+
   return (
     <div className="bg-googleRed py-1 px-2 rounded-full grow flex justify-around items-center">
       <span className="pr-2 font-semibold text-white">Exclude</span>
       <input
         className="rounded-full min-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
         type="text"
+        onKeyDown={(e) => handleEnter(e)}
       ></input>
     </div>
   );

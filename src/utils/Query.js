@@ -11,47 +11,59 @@ class Query {
   }
 
   getRawQuery() {
+    // todo construct plaintext query from provided filters
     return this.rawQuery;
   }
 
   setRawQuery(input) {
+    // ? probably should disable this?
     console.log("query raw is now", input);
     this.rawQuery = input;
   }
 
   addExact(input) {
-    // console.log("pushing to exact", input);
+    if (this.exact.some((phrase) => phrase === input)) {
+      console.warn("ignoring duplicate");
+      return null;
+    }
+
     this.exact.push(input);
+    return input;
   }
 
   removeExact(input) {
-    console.log("removing from exact", input);
+    const index = this.exact.findIndex((phrase) => phrase === input);
 
-    const index = this.exact.findIndex(input);
     if (index === -1) {
       console.error("exact phrase not found");
       return null;
     }
 
-    this.exact.splice(1, index);
+    const response = this.exact.splice(index, 1);
+    return response;
   }
 
-  // addExclude(input) {
-  //   console.log("pushing to exclude", input);
-  //   this.exclude.push(input);
-  // }
+  addExclude(input) {
+    if (this.exclude.some((phrase) => phrase === input)) {
+      console.warn("ignoring duplicate");
+      return null;
+    }
 
-  // removeExclude(input) {
-  //   console.log("removing from exclude", input);
+    this.exclude.push(input);
+    return input;
+  }
 
-  //   const index = this.exclude.findIndex(input);
-  //   if (index === -1) {
-  //     console.error("exclude phrase not found");
-  //     return null;
-  //   }
+  removeExclude(input) {
+    const index = this.exclude.findIndex((phrase) => phrase === input);
 
-  //   this.exclude.push(input);
-  // }
+    if (index === -1) {
+      console.error("exclude phrase not found");
+      return null;
+    }
+
+    const response = this.exclude.splice(index, 1);
+    return response;
+  }
 }
 
 export default Query;
