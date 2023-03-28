@@ -64,6 +64,28 @@ class Query {
     const response = this.exclude.splice(index, 1);
     return response;
   }
+
+  addSite(input) {
+    if (this.site.some((phrase) => phrase === input)) {
+      console.warn("ignoring duplicate");
+      return null;
+    }
+
+    this.site.push(input);
+    return input;
+  }
+
+  removeSite(input) {
+    const index = this.site.findIndex((phrase) => phrase === input);
+
+    if (index === -1) {
+      console.error("site not found");
+      return null;
+    }
+
+    const response = this.site.splice(index, 1);
+    return response;
+  }
 }
 
 export default Query;

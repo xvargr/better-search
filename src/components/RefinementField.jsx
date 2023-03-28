@@ -4,8 +4,13 @@ import { QueryContext } from "../context/QueryContext";
 import Tag from "./Tag";
 
 function General() {
-  const { currentQuery, setRawQuery, currentExact, currentExclude } =
-    useContext(QueryContext);
+  const {
+    currentQuery,
+    setRawQuery,
+    currentExact,
+    currentExclude,
+    currentSite,
+  } = useContext(QueryContext);
 
   function renderExact() {
     const result = [];
@@ -27,6 +32,17 @@ function General() {
     return result;
   }
 
+  // ! ALL SITE TAG, FIELDS, METHODS UNTESTED
+  function renderSite() {
+    const result = [];
+
+    currentSite.forEach((phrase) => {
+      result.push(<Tag type="site" value={phrase} key={`s-${phrase}`} />);
+    });
+
+    return result;
+  }
+
   return (
     <div className="bg-gray-300 w-full py-1 px-2 rounded-full flex justify-around items-center">
       <span className="rounded-full w-full py-0.5 px-1 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
@@ -40,6 +56,7 @@ function General() {
         ></input>
         {renderExact()}
         {renderExclude()}
+        {renderSite()}
       </span>
     </div>
   );
@@ -111,12 +128,23 @@ function Exclude() {
 }
 
 function Site() {
+  const { addSite } = useContext(QueryContext);
+
+  function handleEnter(e) {
+    if (e.key !== "Enter" || e.target.value.length === 0) return null;
+
+    addSite(e.target.value);
+    e.target.value = "";
+    e.preventDefault();
+  }
+
   return (
     <div className="bg-googleGreen py-1 px-2 rounded-full grow flex justify-around items-center">
       <span className="pr-2 font-semibold text-white">Site</span>
       <input
         className="rounded-full min-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
         type="text"
+        onKeyDown={(e) => handleEnter(e)}
       ></input>
     </div>
   );
