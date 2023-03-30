@@ -32,7 +32,6 @@ function General() {
     return result;
   }
 
-  // ! ALL SITE TAG, FIELDS, METHODS UNTESTED
   function renderSite() {
     const result = [];
 
@@ -63,6 +62,17 @@ function General() {
 }
 
 function Range() {
+  // ! add range next, handle 2 inputs
+  // const { addExact } = useContext(QueryContext);
+
+  // function handleEnter(e) {
+  //   if (e.key !== "Enter" || e.target.value.length === 0) return null;
+
+  //   addExact(e.target.value);
+  //   e.target.value = "";
+  //   e.preventDefault();
+  // }
+
   return (
     <div className="bg-googleYellow py-1 px-2 rounded-full grow flex justify-around items-center">
       <span className="pr-2 font-semibold text-white">Range</span>
@@ -70,11 +80,13 @@ function Range() {
         <input
           className="rounded-full max-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
           type="text"
+          // onKeyDown={(e) => handleEnter(e)}
         ></input>
         <span className="font-semibold text-white"> to </span>
         <input
           className="rounded-full max-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
           type="text"
+          // onKeyDown={(e) => handleEnter(e)}
         ></input>
       </div>
     </div>

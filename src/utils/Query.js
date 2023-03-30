@@ -72,6 +72,7 @@ class Query {
     }
 
     this.site.push(input);
+
     return input;
   }
 

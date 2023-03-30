@@ -39,7 +39,7 @@ export default function Tag({ type, value }) {
 
     case "site":
       return (
-        <div className="py-1 px-2 flex items-center rounded-full bg-googleYellow text-white">
+        <div className="py-1 px-2 flex items-center rounded-full bg-googleGreen text-white">
           {value}
           <XMarkIcon
             className="w-5 cursor-pointer"

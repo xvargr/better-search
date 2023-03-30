@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React /*{useEffect}*/ from "react";
 import { useState, createContext } from "react";
 
 import Query from "../utils/Query";
@@ -10,12 +10,12 @@ export function QueryContextProvider(props) {
   const [currentQuery, setCurrentQuery] = useState(queryInstance.getRawQuery());
   const [currentExact, setCurrentExact] = useState(queryInstance.exact);
   const [currentExclude, setCurrentExclude] = useState(queryInstance.exclude);
-  const [currentSite, setCurrentSite] = useState(queryInstance.exclude);
+  const [currentSite, setCurrentSite] = useState(queryInstance.site);
 
   // useEffect(() => {
   //   console.log("exact changed");
-  //   setCurrentExact(queryInstance.exact);
-  // }, [queryInstance]);
+  //   setCurrentExact(queryInstance.site);
+  // }, [queryInstance.site]);
 
   // useMemo(() => {
   //   console.log("exact changed");
@@ -49,12 +49,12 @@ export function QueryContextProvider(props) {
 
   function addSite(string) {
     const response = queryInstance.addSite(string);
-    if (response) setCurrentSite([...queryInstance.exclude]);
+    if (response) setCurrentSite([...queryInstance.site]);
   }
 
   function removeSite(string) {
     const response = queryInstance.removeSite(string);
-    if (response) setCurrentSite([...queryInstance.exclude]);
+    if (response) setCurrentSite([...queryInstance.site]);
   }
 
   const queryState = {
