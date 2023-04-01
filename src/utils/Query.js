@@ -87,6 +87,18 @@ class Query {
     const response = this.site.splice(index, 1);
     return response;
   }
+
+  addRange(to, from) {
+    this.range = { to, from };
+    console.log("in instance ", to, from);
+    console.log(this.range);
+    return this.range;
+  }
+
+  removeRange() {
+    this.range = { to: "", from: "" };
+    return this.range;
+  }
 }
 
 export default Query;

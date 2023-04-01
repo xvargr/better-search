@@ -3,7 +3,8 @@ import { QueryContext } from "../context/QueryContext";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 
 export default function Tag({ type, value }) {
-  const { removeExact, removeExclude, removeSite } = useContext(QueryContext);
+  const { removeExact, removeExclude, removeSite, removeRange } =
+    useContext(QueryContext);
 
   if (!type) console.error("type field is required for Tag component");
 
@@ -14,9 +15,7 @@ export default function Tag({ type, value }) {
           {value}
           <XMarkIcon
             className="w-5 cursor-pointer"
-            onClick={() => {
-              removeExact(value);
-            }}
+            onClick={() => removeExact(value)}
           />
         </div>
       );
@@ -27,15 +26,10 @@ export default function Tag({ type, value }) {
           {value}
           <XMarkIcon
             className="w-5 cursor-pointer"
-            onClick={() => {
-              removeExclude(value);
-            }}
+            onClick={() => removeExclude(value)}
           />
         </div>
       );
-
-    // case "range":
-    //   return <Range value={value} />;
 
     case "site":
       return (
@@ -43,9 +37,18 @@ export default function Tag({ type, value }) {
           {value}
           <XMarkIcon
             className="w-5 cursor-pointer"
-            onClick={() => {
-              removeSite(value);
-            }}
+            onClick={() => removeSite(value)}
+          />
+        </div>
+      );
+
+    case "range":
+      return (
+        <div className="py-1 px-2 flex items-center rounded-full bg-googleYellow text-white">
+          {`from ${value.from} to ${value.to}`}
+          <XMarkIcon
+            className="w-5 cursor-pointer"
+            onClick={() => removeRange()}
           />
         </div>
       );
