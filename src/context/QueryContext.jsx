@@ -11,16 +11,7 @@ export function QueryContextProvider(props) {
   const [currentExact, setCurrentExact] = useState(queryInstance.exact);
   const [currentExclude, setCurrentExclude] = useState(queryInstance.exclude);
   const [currentSite, setCurrentSite] = useState(queryInstance.site);
-
-  // useEffect(() => {
-  //   console.log("exact changed");
-  //   setCurrentExact(queryInstance.site);
-  // }, [queryInstance.site]);
-
-  // useMemo(() => {
-  //   console.log("exact changed");
-  //   setCurrentExact(queryInstance.exact);
-  // }, [queryInstance.exact]);
+  const [currentRange, setCurrentRange] = useState(queryInstance.range);
 
   function setRawQuery(string) {
     queryInstance.setRawQuery(string);
@@ -57,6 +48,18 @@ export function QueryContextProvider(props) {
     if (response) setCurrentSite([...queryInstance.site]);
   }
 
+  function addRange(from, to) {
+    console.log("in context ", to, from);
+    const response = queryInstance.addRange(from, to);
+    console.log(queryInstance.range);
+    if (response) setCurrentRange(queryInstance.range);
+  }
+
+  function removeRange() {
+    const response = queryInstance.removeRange();
+    if (response) setCurrentRange(queryInstance.range);
+  }
+
   const queryState = {
     queryInstance,
     setRawQuery,
@@ -64,12 +67,15 @@ export function QueryContextProvider(props) {
     currentExact,
     currentExclude,
     currentSite,
+    currentRange,
     addExact,
     removeExact,
     addExclude,
     removeExclude,
     addSite,
     removeSite,
+    addRange,
+    removeRange,
   };
 
   return (

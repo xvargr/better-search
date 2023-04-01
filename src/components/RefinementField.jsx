@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { QueryContext } from "../context/QueryContext";
 
+import TagWrapper from "./TagWrapper";
 import Tag from "./Tag";
 
 function General() {
@@ -10,6 +11,7 @@ function General() {
     currentExact,
     currentExclude,
     currentSite,
+    currentRange,
   } = useContext(QueryContext);
 
   function renderExact() {
@@ -18,8 +20,9 @@ function General() {
     currentExact.forEach((phrase) => {
       result.push(<Tag type="exact" value={phrase} key={`i-${phrase}`} />);
     });
-
-    return result;
+    if (result.length > 0) {
+      return <TagWrapper type="exact">{result}</TagWrapper>;
+    }
   }
 
   function renderExclude() {
@@ -29,7 +32,9 @@ function General() {
       result.push(<Tag type="exclude" value={phrase} key={`e-${phrase}`} />);
     });
 
-    return result;
+    if (result.length > 0) {
+      return <TagWrapper type="exclude">{result}</TagWrapper>;
+    }
   }
 
   function renderSite() {
@@ -39,7 +44,23 @@ function General() {
       result.push(<Tag type="site" value={phrase} key={`s-${phrase}`} />);
     });
 
-    return result;
+    if (result.length > 0) {
+      return <TagWrapper type="site">{result}</TagWrapper>;
+    }
+  }
+
+  function renderRange() {
+    if (currentRange.from) {
+      return (
+        <TagWrapper type="range">
+          <Tag
+            type="range"
+            value={currentRange}
+            key={`r-${currentRange.from}`}
+          />
+        </TagWrapper>
+      );
+    }
   }
 
   return (
@@ -56,22 +77,30 @@ function General() {
         {renderExact()}
         {renderExclude()}
         {renderSite()}
+        {renderRange()}
       </span>
     </div>
   );
 }
 
 function Range() {
-  // ! add range next, handle 2 inputs
-  // const { addExact } = useContext(QueryContext);
+  const { addRange } = useContext(QueryContext);
+  const rangeFromRef = useRef();
+  const rangeToRef = useRef();
 
-  // function handleEnter(e) {
-  //   if (e.key !== "Enter" || e.target.value.length === 0) return null;
+  function handleEnter(e) {
+    if (
+      e.key !== "Enter" ||
+      rangeFromRef.current.value.length === 0 ||
+      rangeToRef.current.value.length === 0
+    )
+      return null;
 
-  //   addExact(e.target.value);
-  //   e.target.value = "";
-  //   e.preventDefault();
-  // }
+    addRange(rangeFromRef.current.value, rangeToRef.current.value);
+    rangeFromRef.current.value = "";
+    rangeToRef.current.value = "";
+    e.preventDefault();
+  }
 
   return (
     <div className="bg-googleYellow py-1 px-2 rounded-full grow flex justify-around items-center">
@@ -79,14 +108,16 @@ function Range() {
       <div className="flex grow justify-around max-w-[16rem]">
         <input
           className="rounded-full max-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
-          type="text"
-          // onKeyDown={(e) => handleEnter(e)}
+          ref={rangeFromRef}
+          type="number"
+          onKeyDown={(e) => handleEnter(e)}
         ></input>
         <span className="font-semibold text-white"> to </span>
         <input
           className="rounded-full max-w-[5rem] grow py-0.5 px-1 outline-none text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60"
-          type="text"
-          // onKeyDown={(e) => handleEnter(e)}
+          ref={rangeToRef}
+          type="number"
+          onKeyDown={(e) => handleEnter(e)}
         ></input>
       </div>
     </div>
