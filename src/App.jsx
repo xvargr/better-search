@@ -5,7 +5,7 @@ import RefinementField from "./components/RefinementField";
 import { QueryContext } from "./context/QueryContext";
 
 function App({ suggestionsId, inputId }) {
-  const { setRawQuery, currentQuery } = useContext(QueryContext);
+  const { setGeneralQuery, currentQuery } = useContext(QueryContext);
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
 
   // external elements
@@ -13,15 +13,9 @@ function App({ suggestionsId, inputId }) {
   const inputBox = document.querySelector(inputId);
 
   useEffect(() => {
-    // ? initialize first value
-    // queryInstance.setRawQuery(inputBox.value);
-    // setQueryState(queryInstance.getRawQuery());
-
     function handleInputChange(e) {
-      // queryInstance.setRawQuery(e.target.value);
-      // setQueryState(queryInstance.getRawQuery());
       console.log("external input changed");
-      setRawQuery(e.target.value);
+      setGeneralQuery(e.target.value);
     }
 
     function handleSuggestionsStyleChange() {
@@ -54,7 +48,7 @@ function App({ suggestionsId, inputId }) {
   else
     return (
       <div className="w-full h-auto p-2 flex flex-wrap gap-1 items-center bg-slate-100 text-lightText dark:text-darkText shadow-sides font-sans">
-        <RefinementField type="general" />
+        <RefinementField type="general" externalInputId={inputId} />
         <RefinementField type="exact" />
         <RefinementField type="exclude" />
         <RefinementField type="range" />

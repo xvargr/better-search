@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function TagWrapper(props) {
-  let displayText, color;
+  let displayText;
 
   // todo make tag color and text reactive
   switch (props.type) {
@@ -27,7 +27,7 @@ export default function TagWrapper(props) {
   }
 
   return (
-    <div className="flex p-1 items-center gap-1 bg-googleBlue bg-opacity-50 rounded-full">
+    <div className="flex p-1 items-center gap-1 bg-gray-400 rounded-full">
       <span className="mx-1 font-semibold text-white">{displayText}</span>
       {props.children}
     </div>

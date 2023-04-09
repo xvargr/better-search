@@ -1,6 +1,7 @@
 class Query {
   constructor(initialQuery) {
     this.rawQuery = initialQuery || "";
+    this.general = "";
     this.exact = [];
     this.exclude = [];
     this.site = [];
@@ -19,6 +20,14 @@ class Query {
     // ? probably should disable this?
     console.log("query raw is now", input);
     this.rawQuery = input;
+  }
+
+  getGeneralQuery() {
+    return this.general;
+  }
+
+  setGeneralQuery(input) {
+    this.general = input;
   }
 
   addExact(input) {
@@ -90,8 +99,6 @@ class Query {
 
   addRange(to, from) {
     this.range = { to, from };
-    console.log("in instance ", to, from);
-    console.log(this.range);
     return this.range;
   }
 

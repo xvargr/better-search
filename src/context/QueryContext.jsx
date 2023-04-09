@@ -7,14 +7,16 @@ export const QueryContext = createContext();
 
 export function QueryContextProvider(props) {
   const [queryInstance] = useState(new Query(""));
-  const [currentQuery, setCurrentQuery] = useState(queryInstance.getRawQuery());
+  const [currentQuery, setCurrentQuery] = useState(
+    queryInstance.getGeneralQuery()
+  );
   const [currentExact, setCurrentExact] = useState(queryInstance.exact);
   const [currentExclude, setCurrentExclude] = useState(queryInstance.exclude);
   const [currentSite, setCurrentSite] = useState(queryInstance.site);
   const [currentRange, setCurrentRange] = useState(queryInstance.range);
 
-  function setRawQuery(string) {
-    queryInstance.setRawQuery(string);
+  function setGeneralQuery(string) {
+    queryInstance.setGeneralQuery(string);
     setCurrentQuery(string);
   }
 
@@ -62,7 +64,7 @@ export function QueryContextProvider(props) {
 
   const queryState = {
     queryInstance,
-    setRawQuery,
+    setGeneralQuery,
     currentQuery,
     currentExact,
     currentExclude,

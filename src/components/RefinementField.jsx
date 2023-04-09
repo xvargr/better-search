@@ -4,10 +4,10 @@ import { QueryContext } from "../context/QueryContext";
 import TagWrapper from "./TagWrapper";
 import Tag from "./Tag";
 
-function General() {
+function General({ externalInputId }) {
   const {
     currentQuery,
-    setRawQuery,
+    setGeneralQuery,
     currentExact,
     currentExclude,
     currentSite,
@@ -64,14 +64,21 @@ function General() {
   }
 
   return (
-    <div className="bg-gray-300 w-full py-1 px-2 rounded-full flex justify-around items-center">
-      <span className="rounded-full w-full py-0.5 px-1 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
+    <div className="bg-gray-300 w-full p-1 rounded-lg flex justify-around items-center">
+      <span className="rounded-lg w-full p-0.5 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
         <input
           className="ml-1 bg-white bg-opacity-0 outline-none grow"
           type="text"
           value={currentQuery}
           onChange={(e) => {
-            setRawQuery(e.target.value);
+            // TODO simulate keydown instead of changing value directly to get autosuggestions
+            const externalSearchBox = document.querySelector(externalInputId);
+            console.dir(externalSearchBox);
+            externalSearchBox.dispatchEvent(
+              new KeyboardEvent("keydown", { key: "a" })
+            );
+
+            // setGeneralQuery(e.target.value);
           }}
         ></input>
         {renderExact()}
@@ -193,25 +200,25 @@ function Site() {
   );
 }
 
-export default function RefinementField({ type, value = "" }) {
+export default function RefinementField({ type, externalInputId }) {
   if (!type)
     console.error("type field is required for RefinementField component");
 
   switch (type) {
     case "general":
-      return <General value={value} />;
+      return <General externalInputId={externalInputId} />;
 
     case "exclude":
-      return <Exclude value={value} />;
+      return <Exclude />;
 
     case "exact":
-      return <Exact value={value} />;
+      return <Exact />;
 
     case "range":
-      return <Range value={value} />;
+      return <Range />;
 
     case "site":
-      return <Site value={value} />;
+      return <Site />;
     default:
       console.error("invalid type value for RefinementField component");
       break;
