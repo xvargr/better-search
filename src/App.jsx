@@ -48,7 +48,7 @@ function App({ suggestionsId, inputId }) {
   else
     return (
       <div className="w-full h-auto p-2 flex flex-wrap gap-1 items-center bg-slate-100 text-lightText dark:text-darkText shadow-sides font-sans">
-        <RefinementField type="general" externalInputId={inputId} />
+        <RefinementField type="general" />
         <RefinementField type="exact" />
         <RefinementField type="exclude" />
         <RefinementField type="range" />
