@@ -4,15 +4,9 @@ import { QueryContext } from "../context/QueryContext";
 import TagWrapper from "./TagWrapper";
 import Tag from "./Tag";
 
-function General({ externalInputId }) {
-  const {
-    currentQuery,
-    setGeneralQuery,
-    currentExact,
-    currentExclude,
-    currentSite,
-    currentRange,
-  } = useContext(QueryContext);
+function General() {
+  const { currentExact, currentExclude, currentSite, currentRange } =
+    useContext(QueryContext);
 
   function renderExact() {
     const result = [];
@@ -65,22 +59,7 @@ function General({ externalInputId }) {
 
   return (
     <div className="bg-gray-300 w-full p-1 rounded-lg flex justify-around items-center">
-      <span className="rounded-lg w-full p-0.5 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50 hover:bg-opacity-60">
-        <input
-          className="ml-1 bg-white bg-opacity-0 outline-none grow"
-          type="text"
-          value={currentQuery}
-          onChange={(e) => {
-            // TODO simulate keydown instead of changing value directly to get autosuggestions
-            const externalSearchBox = document.querySelector(externalInputId);
-            console.dir(externalSearchBox);
-            externalSearchBox.dispatchEvent(
-              new KeyboardEvent("keydown", { key: "a" })
-            );
-
-            // setGeneralQuery(e.target.value);
-          }}
-        ></input>
+      <span className="rounded-lg w-full min-h-[2.75rem] p-0.5 flex flex-wrap gap-1 text-gray-800 bg-white bg-opacity-50">
         {renderExact()}
         {renderExclude()}
         {renderSite()}

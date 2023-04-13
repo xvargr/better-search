@@ -20,6 +20,8 @@ export function QueryContextProvider(props) {
     setCurrentQuery(string);
   }
 
+  // todo make search string from queries
+
   function addExact(string) {
     const response = queryInstance.addExact(string);
     if (response) setCurrentExact([...queryInstance.exact]);
