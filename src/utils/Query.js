@@ -1,6 +1,6 @@
 class Query {
-  constructor(initialQuery) {
-    this.rawQuery = initialQuery || "";
+  constructor() {
+    // this.rawQuery = initialQuery || "";
     this.general = "";
     this.exact = [];
     this.exclude = [];
@@ -13,14 +13,39 @@ class Query {
 
   getRawQuery() {
     // todo construct plaintext query from provided filters
-    return this.rawQuery;
+    let rawQuery = this.general;
+
+    // exact phrase
+    this.exact.forEach((phrase) => {
+      rawQuery = `${rawQuery} "${phrase}"`;
+    });
+
+    // exclude phrase
+    this.exclude.forEach((phrase) => {
+      rawQuery = `${rawQuery} -${phrase}`;
+    });
+
+    // todo site regex or add .com?? or reject not a site
+    // from site
+    this.site.forEach((phrase) => {
+      rawQuery = `${rawQuery} site:${phrase}`;
+    });
+
+    // range
+    if (this.range.from.length > 0 && this.range.to.length > 0) {
+      rawQuery = `${rawQuery} ${this.range.from}..${this.range.to}`;
+    }
+
+    // todo OR combine
+
+    return this.rawQuery; // ! untested
   }
 
-  setRawQuery(input) {
-    // ? probably should disable this?
-    console.log("query raw is now", input);
-    this.rawQuery = input;
-  }
+  // setRawQuery(input) {
+  //   // ? probably should disable this?
+  //   console.log("query raw is now", input);
+  //   // this.rawQuery = input;
+  // }
 
   getGeneralQuery() {
     return this.general;
